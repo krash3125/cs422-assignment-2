@@ -71,16 +71,16 @@ def q1_goodput_plots(samples, plots_dir):
                 ax.plot(run["t_s"], run["goodput_mbps"], color=CC_COLORS.get(cc, INK),
                         linestyle=REP_STYLES[i % len(REP_STYLES)], label=f"rep {rep}")
             ax.set_title(short(host), loc="left")
-            ax.set_ylim(bottom=0)
             ax.set_ylabel("Mbps")
-            if len(d):
-                ax.legend(fontsize=7, loc="lower right")
         for ax in axes.flat[len(hosts):]:
             ax.set_visible(False)
+        floor_at_zero(axes)
         for ax in axes[-1]:
             ax.set_xlabel("time (s)")
         fig.suptitle(f"Q1: goodput over time, all destinations ({cc})", x=0.01, ha="left")
         fig.tight_layout()
+        handles, labels = axes.flat[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="upper right", ncol=3, fontsize=8, frameon=False)
         fig.savefig(os.path.join(plots_dir, f"q1_goodput_{cc}.pdf"))
         plt.close(fig)
 
@@ -141,7 +141,11 @@ def draw_timeseries(axes, run, color):
     axes[3].plot(run["t_s"], run["goodput_mbps"], color=color)
     axes[3].set_ylabel("goodput (Mbps)")
     axes[3].set_xlabel("time (s)")
-    for ax in axes:
+
+
+def floor_at_zero(axes):
+    """Call after all data is drawn; earlier calls would freeze shared axes at the first panel's range."""
+    for ax in np.ravel(axes):
         ax.set_ylim(bottom=0)
 
 
@@ -149,6 +153,7 @@ def q2_timeseries(run, path):
     cc, host = run["cc"].iloc[0], run["host"].iloc[0]
     fig, axes = plt.subplots(4, 1, figsize=(7.5, 7.5), sharex=True)
     draw_timeseries(axes, run, CC_COLORS.get(cc, INK))
+    floor_at_zero(axes)
     axes[1].legend(fontsize=7, loc="upper right")
     axes[2].set_title("shaded = ca_state Recovery/Loss", loc="right", color=MUTED, fontsize=7)
     fig.suptitle(f"Q2: TCP stats over time, {host}, cc={cc}, run {run['test_id'].iloc[0]}", x=0.01, ha="left")
@@ -190,6 +195,7 @@ def q3_timeseries_grid(samples, host, path):
         if j > 0:
             for ax in axes[:, j]:
                 ax.set_ylabel("")
+    floor_at_zero(axes)
     fig.suptitle(f"Q3: CUBIC vs Reno vs BBR over time, {host} (shared y-axis per row)", x=0.01, ha="left")
     fig.tight_layout()
     fig.savefig(path)
@@ -205,7 +211,7 @@ def q3_timeseries_overlay(samples, host, path):
         for ax, (col, label) in zip(axes, cols):
             ax.plot(run["t_s"], run[col], color=CC_COLORS.get(cc, INK), label=cc)
             ax.set_ylabel(label)
-            ax.set_ylim(bottom=0)
+    floor_at_zero(axes)
     axes[0].legend(ncol=3, fontsize=8, loc="upper right")
     axes[-1].set_xlabel("time (s)")
     fig.suptitle(f"Q3: CUBIC vs Reno vs BBR overlaid, {host}", x=0.01, ha="left")
@@ -243,6 +249,7 @@ def per_test_metrics(samples):
         min_rtt = d.loc[d["min_rtt_ms"] > 0, "min_rtt_ms"].min()
         bdp_bytes = d["delivery_rate_bps"].max() / 8 * min_rtt / 1000
         sent = d["bytes_sent"].max()
+        steady = d[d["t_s"] > 5]  # Skip slow start for the window-limit columns.
         rows.append({
             "test_id": test_id, "host": d["host"].iloc[0], "cc": d["cc"].iloc[0], "rep": d["rep"].iloc[0],
             "seq": d["seq"].iloc[0], "goodput_mbps": d["goodput_mbps"].mean(),
@@ -253,6 +260,8 @@ def per_test_metrics(samples):
             "cwnd_mean_kb": d["cwnd_bytes"].mean() / 1000, "bdp_kb": bdp_bytes / 1000,
             "cwnd_over_bdp": d["cwnd_bytes"].mean() / bdp_bytes if bdp_bytes else float("nan"),
             "rwnd_limited_pct": 100 * d["rwnd_limited_frac"].mean(),
+            "inflight_mb": (steady["unacked_pkts"] * steady["mss_bytes"]).median() / 1e6,
+            "cwnd_limited_pct": 100 * (steady["unacked_pkts"] >= steady["cwnd_pkts"] - 2).mean(),
         })
     return pd.DataFrame(rows).sort_values(["host", "cc", "rep"])
 
@@ -264,6 +273,7 @@ def q3_dest_summary(per_test):
         "srtt_median_ms": g["srtt_median_ms"].mean(), "min_rtt_ms": g["min_rtt_ms"].min(),
         "rtt_inflation": g["rtt_inflation"].mean(), "retrans_pct": g["retrans_pct"].mean(),
         "cwnd_over_bdp": g["cwnd_over_bdp"].mean(), "rwnd_limited_pct": g["rwnd_limited_pct"].mean(),
+        "inflight_mb": g["inflight_mb"].mean(), "cwnd_limited_pct": g["cwnd_limited_pct"].mean(),
     }).reset_index()
     winners = []
     for host, d in table.groupby("host"):
@@ -293,8 +303,7 @@ def q3_variability(per_test, path):
     axes[0].legend(ncol=3, fontsize=8, loc="upper right")
     axes[1].set_xticks(range(len(hosts)))
     axes[1].set_xticklabels([short(h) for h in hosts], rotation=35, ha="right", fontsize=7)
-    for ax in axes:
-        ax.set_ylim(bottom=0)
+    floor_at_zero(axes)
     fig.suptitle("Q3: run-to-run variability (dot = one run, bar = mean; hosts sorted by min RTT)", x=0.01, ha="left")
     fig.tight_layout()
     fig.savefig(path)

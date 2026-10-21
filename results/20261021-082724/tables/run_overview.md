@@ -1,0 +1,6 @@
+- representative destination: iperf-ams-nl.eranium.net
+- destinations requested/selected/shortfall: 10/10/0
+- tests ok: 90 of 90
+- cc requested == cc used in every ok test: True
+- median |bytes_acked - server_bytes| / bytes_acked: 0.01%
+- median sample interval: 0.200 s

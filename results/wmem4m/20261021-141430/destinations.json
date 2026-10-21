@@ -1,0 +1,74 @@
+{
+  "requested": 4,
+  "selected": [
+    {
+      "host": "84.17.41.11",
+      "ip": "84.17.41.11",
+      "port": 5201,
+      "ports": [
+        5201
+      ],
+      "continent": "North America",
+      "country": "US",
+      "site": "Seattle",
+      "provider": "DATAPACKET"
+    },
+    {
+      "host": "89.187.165.1",
+      "ip": "89.187.165.1",
+      "port": 5201,
+      "ports": [
+        5201
+      ],
+      "continent": "Europe",
+      "country": "CH",
+      "site": "Z\u00fcrich",
+      "provider": "DATAPACKET"
+    },
+    {
+      "host": "iperf-ams-nl.eranium.net",
+      "ip": "217.18.95.142",
+      "port": 5210,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "Europe",
+      "country": "NL",
+      "site": "Amsterdam",
+      "provider": "Eranium"
+    },
+    {
+      "host": "speedtest.syd12.au.leaseweb.net",
+      "ip": "23.106.244.70",
+      "port": 5205,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "Oceania",
+      "country": "AU",
+      "site": "Sydney",
+      "provider": "LeaseWeb"
+    }
+  ],
+  "shortfall": 0,
+  "max_attempts": 40,
+  "seed": 422
+}

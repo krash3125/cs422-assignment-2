@@ -1,0 +1,129 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  70.66kB
+Step 1/6 : FROM ubuntu:24.04
+ ---> 68ee22004a91
+Step 2/6 : ENV DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 MPLCONFIGDIR=/tmp/mpl
+ ---> Using cache
+ ---> 2bfe073e1e52
+Step 3/6 : RUN apt-get update     && apt-get install -y --no-install-recommends         python3 python3-numpy python3-pandas python3-matplotlib ca-certificates iproute2     && rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 10483c74d123
+Step 4/6 : WORKDIR /app
+ ---> Using cache
+ ---> 8fcb11c59611
+Step 5/6 : COPY *.py servers.csv ./
+ ---> Using cache
+ ---> 1f4540c5d85c
+Step 6/6 : ENTRYPOINT ["python3", "run_experiments.py"]
+ ---> Using cache
+ ---> 10c2f2b69891
+Successfully built 10c2f2b69891
+Successfully tagged cs422-a2:latest
+Selecting 10 destinations from 183 servers (seed=422)
+  probe speedtest.dal13.us.leaseweb.net:5207 -> ok 
+  probe 66.35.22.79:30003 -> ok 
+  probe 89.187.165.1:5201 -> ok 
+  probe speedtest.wdc2.us.leaseweb.net:5209 -> ok 
+  probe iperf-ams-nl.eranium.net:5202 -> ok 
+  probe 122.228.230.122:5205 -> CTRL_TIMEOUT server did not respond on control connection
+  probe 89.187.162.1:5201 -> ok 
+  probe iperf3.moji.fr:5204 -> ACCESS_DENIED server is busy running another test
+  probe iperf3.moji.fr:5232 -> ok 
+  probe speedtest.syd12.au.leaseweb.net:5202 -> ok 
+  probe 84.17.41.11:5201 -> ok 
+  probe iperf.worldstream.nl:5203 -> ok 
+[1/90] rep 1 speedtest.dal13.us.leaseweb.net:5207 cubic->cubic ok mean goodput 138.8 Mbps 
+[2/90] rep 1 speedtest.dal13.us.leaseweb.net:5207 reno->reno ok mean goodput 179.7 Mbps 
+[3/90] rep 1 speedtest.dal13.us.leaseweb.net:5207 bbr->bbr ok mean goodput 237.5 Mbps 
+[4/90] rep 1 66.35.22.79:30003 cubic->cubic ok mean goodput 218.2 Mbps 
+[5/90] rep 1 66.35.22.79:30003 reno->reno ok mean goodput 212.9 Mbps 
+[6/90] rep 1 66.35.22.79:30003 bbr->bbr ok mean goodput 259.4 Mbps 
+[7/90] rep 1 89.187.165.1:5201 cubic->cubic ok mean goodput 128.2 Mbps 
+[8/90] rep 1 89.187.165.1:5201 reno->reno ok mean goodput 166.0 Mbps 
+[9/90] rep 1 89.187.165.1:5201 bbr->bbr ok mean goodput 154.5 Mbps 
+[10/90] rep 1 speedtest.wdc2.us.leaseweb.net:5209 cubic->cubic ok mean goodput 243.1 Mbps 
+[11/90] rep 1 speedtest.wdc2.us.leaseweb.net:5209 reno->reno ok mean goodput 252.9 Mbps 
+[12/90] rep 1 speedtest.wdc2.us.leaseweb.net:5209 bbr->bbr ok mean goodput 234.0 Mbps 
+[13/90] rep 1 iperf-ams-nl.eranium.net:5202 cubic->cubic ok mean goodput 173.9 Mbps 
+[14/90] rep 1 iperf-ams-nl.eranium.net:5202 reno->reno ok mean goodput 177.0 Mbps 
+[15/90] rep 1 iperf-ams-nl.eranium.net:5202 bbr->bbr ok mean goodput 174.9 Mbps 
+[16/90] rep 1 89.187.162.1:5201 cubic->cubic ok mean goodput 96.1 Mbps 
+[17/90] rep 1 89.187.162.1:5201 reno->reno ok mean goodput 80.2 Mbps 
+[18/90] rep 1 89.187.162.1:5201 bbr->bbr ok mean goodput 81.9 Mbps 
+[19/90] rep 1 iperf3.moji.fr:5232 cubic->cubic ok mean goodput 180.8 Mbps 
+[20/90] rep 1 iperf3.moji.fr:5232 reno->reno ok mean goodput 175.8 Mbps 
+[21/90] rep 1 iperf3.moji.fr:5232 bbr->bbr ok mean goodput 180.1 Mbps 
+[22/90] rep 1 speedtest.syd12.au.leaseweb.net:5202 cubic->cubic ok mean goodput 107.7 Mbps 
+[23/90] rep 1 speedtest.syd12.au.leaseweb.net:5201 reno->reno ok mean goodput 111.5 Mbps 
+[24/90] rep 1 speedtest.syd12.au.leaseweb.net:5202 bbr->bbr ok mean goodput 104.2 Mbps 
+[25/90] rep 1 84.17.41.11:5201 cubic->cubic ok mean goodput 227.7 Mbps 
+[26/90] rep 1 84.17.41.11:5201 reno->reno ok mean goodput 227.3 Mbps 
+[27/90] rep 1 84.17.41.11:5201 bbr->bbr ok mean goodput 220.2 Mbps 
+[28/90] rep 1 iperf.worldstream.nl:5203 cubic->cubic ok mean goodput 176.5 Mbps 
+[29/90] rep 1 iperf.worldstream.nl:5203 reno->reno ok mean goodput 173.3 Mbps 
+[30/90] rep 1 iperf.worldstream.nl:5203 bbr->bbr ok mean goodput 168.1 Mbps 
+[31/90] rep 2 speedtest.dal13.us.leaseweb.net:5207 reno->reno ok mean goodput 112.4 Mbps 
+[32/90] rep 2 speedtest.dal13.us.leaseweb.net:5207 bbr->bbr ok mean goodput 250.8 Mbps 
+[33/90] rep 2 speedtest.dal13.us.leaseweb.net:5207 cubic->cubic ok mean goodput 169.1 Mbps 
+[34/90] rep 2 66.35.22.79:30003 reno->reno ok mean goodput 251.8 Mbps 
+[35/90] rep 2 66.35.22.79:30003 bbr->bbr ok mean goodput 220.4 Mbps 
+[36/90] rep 2 66.35.22.79:30003 cubic->cubic ok mean goodput 224.4 Mbps 
+[37/90] rep 2 89.187.165.1:5201 reno->reno ok mean goodput 164.1 Mbps 
+[38/90] rep 2 89.187.165.1:5201 bbr->bbr ok mean goodput 152.9 Mbps 
+[39/90] rep 2 89.187.165.1:5201 cubic->cubic ok mean goodput 159.6 Mbps 
+[40/90] rep 2 speedtest.wdc2.us.leaseweb.net:5209 reno->reno ok mean goodput 249.1 Mbps 
+[41/90] rep 2 speedtest.wdc2.us.leaseweb.net:5209 bbr->bbr ok mean goodput 241.3 Mbps 
+[42/90] rep 2 speedtest.wdc2.us.leaseweb.net:5209 cubic->cubic ok mean goodput 234.4 Mbps 
+[43/90] rep 2 iperf-ams-nl.eranium.net:5202 reno->reno ok mean goodput 174.8 Mbps 
+[44/90] rep 2 iperf-ams-nl.eranium.net:5202 bbr->bbr ok mean goodput 173.0 Mbps 
+[45/90] rep 2 iperf-ams-nl.eranium.net:5202 cubic->cubic ok mean goodput 170.6 Mbps 
+[46/90] rep 2 89.187.162.1:5201 reno->reno ok mean goodput 78.3 Mbps 
+[47/90] rep 2 89.187.162.1:5201 bbr->bbr ok mean goodput 78.3 Mbps 
+[48/90] rep 2 89.187.162.1:5201 cubic->cubic ok mean goodput 94.2 Mbps 
+[49/90] rep 2 iperf3.moji.fr:5232 reno->reno ok mean goodput 182.8 Mbps 
+[50/90] rep 2 iperf3.moji.fr:5232 bbr->bbr ok mean goodput 176.2 Mbps 
+[51/90] rep 2 iperf3.moji.fr:5232 cubic->cubic ok mean goodput 188.7 Mbps 
+[52/90] rep 2 speedtest.syd12.au.leaseweb.net:5202 reno->reno ok mean goodput 67.1 Mbps 
+[53/90] rep 2 speedtest.syd12.au.leaseweb.net:5202 bbr->bbr ok mean goodput 101.6 Mbps 
+[54/90] rep 2 speedtest.syd12.au.leaseweb.net:5209 cubic->cubic ok mean goodput 110.4 Mbps 
+[55/90] rep 2 84.17.41.11:5201 reno->reno ok mean goodput 228.0 Mbps 
+[56/90] rep 2 84.17.41.11:5201 bbr->bbr ok mean goodput 229.2 Mbps 
+[57/90] rep 2 84.17.41.11:5201 cubic->cubic ok mean goodput 226.3 Mbps 
+[58/90] rep 2 iperf.worldstream.nl:5203 reno->reno ok mean goodput 174.5 Mbps 
+[59/90] rep 2 iperf.worldstream.nl:5203 bbr->bbr ok mean goodput 176.0 Mbps 
+[60/90] rep 2 iperf.worldstream.nl:5203 cubic->cubic ok mean goodput 171.4 Mbps 
+[61/90] rep 3 speedtest.dal13.us.leaseweb.net:5207 bbr->bbr ok mean goodput 232.1 Mbps 
+[62/90] rep 3 speedtest.dal13.us.leaseweb.net:5207 cubic->cubic ok mean goodput 155.3 Mbps 
+[63/90] rep 3 speedtest.dal13.us.leaseweb.net:5207 reno->reno ok mean goodput 156.5 Mbps 
+[64/90] rep 3 66.35.22.79:30003 bbr->bbr ok mean goodput 239.2 Mbps 
+[65/90] rep 3 66.35.22.79:30003 cubic->cubic ok mean goodput 242.8 Mbps 
+[66/90] rep 3 66.35.22.79:30003 reno->reno ok mean goodput 241.3 Mbps 
+[67/90] rep 3 89.187.165.1:5201 bbr->bbr ok mean goodput 160.1 Mbps 
+[68/90] rep 3 89.187.165.1:5201 cubic->cubic ok mean goodput 156.6 Mbps 
+[69/90] rep 3 89.187.165.1:5201 reno->reno ok mean goodput 162.2 Mbps 
+[70/90] rep 3 speedtest.wdc2.us.leaseweb.net:5209 bbr->bbr ok mean goodput 228.2 Mbps 
+[71/90] rep 3 speedtest.wdc2.us.leaseweb.net:5209 cubic->cubic ok mean goodput 223.5 Mbps 
+[72/90] rep 3 speedtest.wdc2.us.leaseweb.net:5209 reno->reno ok mean goodput 223.3 Mbps 
+[73/90] rep 3 iperf-ams-nl.eranium.net:5202 bbr->bbr ok mean goodput 174.2 Mbps 
+[74/90] rep 3 iperf-ams-nl.eranium.net:5202 cubic->cubic ok mean goodput 173.5 Mbps 
+[75/90] rep 3 iperf-ams-nl.eranium.net:5202 reno->reno ok mean goodput 173.4 Mbps 
+[76/90] rep 3 89.187.162.1:5201 bbr->bbr ok mean goodput 89.1 Mbps 
+[77/90] rep 3 89.187.162.1:5201 cubic->cubic ok mean goodput 57.5 Mbps 
+[78/90] rep 3 89.187.162.1:5201 reno->reno ok mean goodput 94.4 Mbps 
+[79/90] rep 3 iperf3.moji.fr:5232 bbr->bbr ok mean goodput 179.4 Mbps 
+[80/90] rep 3 iperf3.moji.fr:5232 cubic->cubic ok mean goodput 184.6 Mbps 
+[81/90] rep 3 iperf3.moji.fr:5232 reno->reno ok mean goodput 182.5 Mbps 
+[82/90] rep 3 speedtest.syd12.au.leaseweb.net:5210 bbr->bbr ok mean goodput 101.5 Mbps 
+[83/90] rep 3 speedtest.syd12.au.leaseweb.net:5202 cubic->cubic ok mean goodput 111.8 Mbps 
+[84/90] rep 3 speedtest.syd12.au.leaseweb.net:5202 reno->reno ok mean goodput 58.0 Mbps 
+[85/90] rep 3 84.17.41.11:5201 bbr->bbr ok mean goodput 221.3 Mbps 
+[86/90] rep 3 84.17.41.11:5201 cubic->cubic ok mean goodput 220.9 Mbps 
+[87/90] rep 3 84.17.41.11:5201 reno->reno ok mean goodput 218.5 Mbps 
+[88/90] rep 3 iperf.worldstream.nl:5203 bbr->bbr ok mean goodput 166.5 Mbps 
+[89/90] rep 3 iperf.worldstream.nl:5203 cubic->cubic ok mean goodput 128.4 Mbps 
+[90/90] rep 3 iperf.worldstream.nl:5203 reno->reno ok mean goodput 176.6 Mbps 
+Plots in results/20261021-082724/plots, tables in results/20261021-082724/tables, representative destination iperf-ams-nl.eranium.net
+Done. Results in results/20261021-082724

@@ -1,0 +1,67 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  81.92kB
+Step 1/6 : FROM ubuntu:24.04
+ ---> 68ee22004a91
+Step 2/6 : ENV DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 MPLCONFIGDIR=/tmp/mpl
+ ---> Using cache
+ ---> 2bfe073e1e52
+Step 3/6 : RUN apt-get update     && apt-get install -y --no-install-recommends         python3 python3-numpy python3-pandas python3-matplotlib ca-certificates iproute2     && rm -rf /var/lib/apt/lists/*
+ ---> Using cache
+ ---> 10483c74d123
+Step 4/6 : WORKDIR /app
+ ---> Using cache
+ ---> 8fcb11c59611
+Step 5/6 : COPY *.py servers.csv ./
+ ---> 342a69345487
+Step 6/6 : ENTRYPOINT ["python3", "run_experiments.py"]
+ ---> Running in 0674a4d957f8
+ ---> Removed intermediate container 0674a4d957f8
+ ---> 093e750bb716
+Successfully built 093e750bb716
+Successfully tagged cs422-a2:latest
+Selecting 4 destinations from 4 servers (seed=422)
+  probe 84.17.41.11:5201 -> ok 
+  probe 89.187.165.1:5201 -> ok 
+  probe iperf-ams-nl.eranium.net:5210 -> ok 
+  probe speedtest.syd12.au.leaseweb.net:5205 -> ok 
+[1/36] rep 1 84.17.41.11:5201 cubic->cubic ok mean goodput 158.5 Mbps 
+[2/36] rep 1 84.17.41.11:5201 reno->reno ok mean goodput 146.7 Mbps 
+[3/36] rep 1 84.17.41.11:5201 bbr->bbr ok mean goodput 151.0 Mbps 
+[4/36] rep 1 89.187.165.1:5201 cubic->cubic ok mean goodput 158.7 Mbps 
+[5/36] rep 1 89.187.165.1:5201 reno->reno ok mean goodput 117.4 Mbps 
+[6/36] rep 1 89.187.165.1:5201 bbr->bbr ok mean goodput 196.4 Mbps 
+[7/36] rep 1 iperf-ams-nl.eranium.net:5210 cubic->cubic ok mean goodput 207.1 Mbps 
+[8/36] rep 1 iperf-ams-nl.eranium.net:5210 reno->reno ok mean goodput 130.7 Mbps 
+[9/36] rep 1 iperf-ams-nl.eranium.net:5208 bbr->bbr ok mean goodput 242.9 Mbps 
+[10/36] rep 1 speedtest.syd12.au.leaseweb.net:5205 cubic->cubic ok mean goodput 241.2 Mbps 
+[11/36] rep 1 speedtest.syd12.au.leaseweb.net:5205 reno->reno ok mean goodput 146.4 Mbps 
+[12/36] rep 1 speedtest.syd12.au.leaseweb.net:5205 bbr->bbr ok mean goodput 169.2 Mbps 
+[13/36] rep 2 84.17.41.11:5201 reno->reno ok mean goodput 167.4 Mbps 
+[14/36] rep 2 84.17.41.11:5201 bbr->bbr ok mean goodput 210.0 Mbps 
+[15/36] rep 2 84.17.41.11:5201 cubic->cubic ok mean goodput 206.5 Mbps 
+[16/36] rep 2 89.187.165.1:5201 reno->reno ok mean goodput 99.6 Mbps 
+[17/36] rep 2 89.187.165.1:5201 bbr->bbr ok mean goodput 190.6 Mbps 
+[18/36] rep 2 89.187.165.1:5201 cubic->cubic ok mean goodput 197.9 Mbps 
+[19/36] rep 2 iperf-ams-nl.eranium.net:5210 reno->reno ok mean goodput 173.5 Mbps 
+[20/36] rep 2 iperf-ams-nl.eranium.net:5210 bbr->bbr ok mean goodput 184.6 Mbps 
+[21/36] rep 2 iperf-ams-nl.eranium.net:5210 cubic->cubic ok mean goodput 195.0 Mbps 
+[22/36] rep 2 speedtest.syd12.au.leaseweb.net:5205 reno->reno ok mean goodput 199.9 Mbps 
+[23/36] rep 2 speedtest.syd12.au.leaseweb.net:5205 bbr->bbr ok mean goodput 218.3 Mbps 
+[24/36] rep 2 speedtest.syd12.au.leaseweb.net:5205 cubic->cubic ok mean goodput 196.2 Mbps 
+[25/36] rep 3 84.17.41.11:5201 bbr->bbr ok mean goodput 114.8 Mbps 
+[26/36] rep 3 84.17.41.11:5201 cubic->cubic ok mean goodput 131.5 Mbps 
+[27/36] rep 3 84.17.41.11:5201 reno->reno ok mean goodput 71.5 Mbps 
+[28/36] rep 3 89.187.165.1:5201 bbr->bbr ok mean goodput 96.6 Mbps 
+[29/36] rep 3 89.187.165.1:5201 cubic->cubic ok mean goodput 175.1 Mbps 
+[30/36] rep 3 89.187.165.1:5201 reno->reno ok mean goodput 232.1 Mbps 
+[31/36] rep 3 iperf-ams-nl.eranium.net:5210 bbr->bbr ok mean goodput 181.2 Mbps 
+[32/36] rep 3 iperf-ams-nl.eranium.net:5210 cubic->cubic ok mean goodput 177.2 Mbps 
+[33/36] rep 3 iperf-ams-nl.eranium.net:5210 reno->reno ok mean goodput 137.3 Mbps 
+[34/36] rep 3 speedtest.syd12.au.leaseweb.net:5206 bbr->bbr ok mean goodput 185.4 Mbps 
+[35/36] rep 3 speedtest.syd12.au.leaseweb.net:5205 cubic->cubic ok mean goodput 131.8 Mbps 
+[36/36] rep 3 speedtest.syd12.au.leaseweb.net:5205 reno->reno ok mean goodput 111.4 Mbps 
+Plots in results/wmem32m/20261021-135240/plots, tables in results/wmem32m/20261021-135240/tables, representative destination speedtest.syd12.au.leaseweb.net
+Done. Results in results/wmem32m/20261021-135240

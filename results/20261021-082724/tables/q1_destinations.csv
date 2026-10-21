@@ -1,0 +1,11 @@
+host,ip,port,country,site,provider
+speedtest.dal13.us.leaseweb.net,209.58.159.68,5207,US,Dallas,LeaseWeb
+66.35.22.79,66.35.22.79,30003,US,Ashburn,FortiSASE
+89.187.165.1,89.187.165.1,5201,CH,Zürich,DATAPACKET
+speedtest.wdc2.us.leaseweb.net,23.105.9.80,5209,US,Washington,LeaseWeb
+iperf-ams-nl.eranium.net,217.18.95.142,5202,NL,Amsterdam,Eranium
+89.187.162.1,89.187.162.1,5201,SG,Singapore,DATAPACKET
+iperf3.moji.fr,45.147.210.189,5232,FR,Paris,moji
+speedtest.syd12.au.leaseweb.net,23.106.244.70,5202,AU,Sydney,LeaseWeb
+84.17.41.11,84.17.41.11,5201,US,Seattle,DATAPACKET
+iperf.worldstream.nl,185.182.195.76,5203,NL,Naaldwijk,Worldstream

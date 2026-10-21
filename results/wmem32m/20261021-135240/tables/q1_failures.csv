@@ -1,0 +1,7 @@
+phase,host,port,cc,status,error
+main#0,iperf-ams-nl.eranium.net,5210,bbr,PREMATURE_CLOSE,control connection error: [Errno 104] Connection reset by peer
+main#0,89.187.165.1,5201,bbr,CONNECT_REFUSED,89.187.165.1:5201 refused the connection
+main#0,84.17.41.11,5201,cubic,CONNECT_REFUSED,84.17.41.11:5201 refused the connection
+main#1,84.17.41.11,5201,cubic,ACCESS_DENIED,server is busy running another test
+main#0,speedtest.syd12.au.leaseweb.net,5205,bbr,PREMATURE_CLOSE,server closed control connection
+main#1,speedtest.syd12.au.leaseweb.net,5208,bbr,SERVER_TERMINATE,server terminated the test

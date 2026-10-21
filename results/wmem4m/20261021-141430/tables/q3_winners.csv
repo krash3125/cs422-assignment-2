@@ -1,0 +1,5 @@
+host,min_rtt_ms,best_goodput,best_goodput_mbps,lowest_rtt,lowest_srtt_ms
+84.17.41.11,52.759,reno,222.18679682573875,cubic,93.7165
+iperf-ams-nl.eranium.net,102.769,cubic,163.48392458278772,cubic,119.16983333333333
+89.187.165.1,116.601,reno,151.3980896894702,bbr,132.87633333333335
+speedtest.syd12.au.leaseweb.net,181.0,reno,107.96527599790132,cubic,189.70016666666666

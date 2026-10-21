@@ -49,6 +49,7 @@ def preflight(algos):
         "allowed_cc": read_proc("/proc/sys/net/ipv4/tcp_allowed_congestion_control"),
         "default_cc": read_proc("/proc/sys/net/ipv4/tcp_congestion_control"),
         "default_qdisc": read_proc("/proc/sys/net/core/default_qdisc"),
+        "tcp_wmem": read_proc("/proc/sys/net/ipv4/tcp_wmem"),
         "git_sha": os.environ.get("GIT_SHA", ""),
         "cc_check": {},
     }
