@@ -1,0 +1,4 @@
+.git
+results
+*.pdf
+__pycache__
