@@ -9,9 +9,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-ALGO_ORDER = ["cubic", "reno", "bbr"]
-CC_COLORS = {"cubic": "#2a78d6", "reno": "#eb6834", "bbr": "#1baf7a"}
+# In analyze.py, replace lines 12-13 with:
+ALGO_ORDER = ["qaimd", "cubic", "reno", "bbr"]
+CC_COLORS = {"qaimd": "#88419d", "cubic": "#2a78d6", "reno": "#eb6834", "bbr": "#1baf7a"}
 REP_STYLES = ["-", "--", ":", "-."]
 INK, MUTED, GRID, SHADE = "#0b0b0b", "#52514e", "#e4e3df", "#f3d9cf"
 
@@ -187,7 +187,7 @@ def q2_scatter(d, path):
 
 def q3_timeseries_grid(samples, host, path):
     algos = algos_in(samples)
-    fig, axes = plt.subplots(4, len(algos), figsize=(7.5, 7.5), sharex=True, sharey="row", squeeze=False)
+    fig, axes = plt.subplots(4, len(algos), figsize=(9.5, 7.5), sharex=True, sharey="row", squeeze=False)
     for j, cc in enumerate(algos):
         run = representative_run(samples, host, cc)
         draw_timeseries(axes[:, j], run, CC_COLORS.get(cc, INK))
@@ -196,7 +196,7 @@ def q3_timeseries_grid(samples, host, path):
             for ax in axes[:, j]:
                 ax.set_ylabel("")
     floor_at_zero(axes)
-    fig.suptitle(f"Q3: CUBIC vs Reno vs BBR over time, {host} (shared y-axis per row)", x=0.01, ha="left")
+    fig.suptitle(f"A3: QAIMD vs CUBIC vs Reno vs BBR over time, {host} (shared y-axis per row)", x=0.01, ha="left")
     fig.tight_layout()
     fig.savefig(path)
     plt.close(fig)
@@ -212,7 +212,7 @@ def q3_timeseries_overlay(samples, host, path):
             ax.plot(run["t_s"], run[col], color=CC_COLORS.get(cc, INK), label=cc)
             ax.set_ylabel(label)
     floor_at_zero(axes)
-    axes[0].legend(ncol=3, fontsize=8, loc="upper right")
+    axes[0].legend(ncol=4, fontsize=8, loc="upper right")
     axes[-1].set_xlabel("time (s)")
     fig.suptitle(f"Q3: CUBIC vs Reno vs BBR overlaid, {host}", x=0.01, ha="left")
     fig.tight_layout()
@@ -223,7 +223,7 @@ def q3_timeseries_overlay(samples, host, path):
 def q3_scatter_grid(samples, host, path):
     algos = algos_in(samples)
     d_host = samples[samples["host"] == host]
-    fig, axes = plt.subplots(3, len(algos), figsize=(7.5, 7), sharey=True, sharex="row", squeeze=False)
+    fig, axes = plt.subplots(3, len(algos), figsize=(9.5, 7), sharey=True, sharex="row", squeeze=False)
     for j, cc in enumerate(algos):
         d = d_host[d_host["cc"] == cc]
         for i, (col, label) in enumerate(SCATTERS):
@@ -300,7 +300,7 @@ def q3_variability(per_test, path):
                     ax.hlines(d[col].mean(), i + offset - 0.09, i + offset + 0.09, color=CC_COLORS.get(cc, INK))
     axes[0].set_ylabel("mean goodput per run (Mbps)")
     axes[1].set_ylabel("median srtt per run (ms)")
-    axes[0].legend(ncol=3, fontsize=8, loc="upper right")
+    axes[0].legend(ncol=4, fontsize=8, loc="upper right")
     axes[1].set_xticks(range(len(hosts)))
     axes[1].set_xticklabels([short(h) for h in hosts], rotation=35, ha="right", fontsize=7)
     floor_at_zero(axes)
