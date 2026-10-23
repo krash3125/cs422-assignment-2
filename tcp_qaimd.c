@@ -200,7 +200,7 @@ static void qaimd_main(struct sock *sk, u32 ack, int flag, const struct rate_sam
 	u32 rtt_us;
 
 	/* 1. Update RTT signals */
-	if (rs->rtt_us > 0 && !(flag & FLAG_RETRANS_DATA_ACKED)) {
+	if (rs->rtt_us > 0) {
 		rtt_us = (u32)rs->rtt_us;
 		if (rtt_us < ca->rtt_round_min_us)
 			ca->rtt_round_min_us = rtt_us;
@@ -246,7 +246,7 @@ static void qaimd_main(struct sock *sk, u32 ack, int flag, const struct rate_sam
 	}
 
 	/* 4. Check round-trip boundary */
-	if (!before(tp->snd_una, tp->next_seq) ||
+	if (!before(tp->snd_una, tp->snd_nxt) ||
 	    (tp->delivered - ca->round_Delivered) >= max_t(u32, tcp_snd_cwnd(tp), 1U)) {
 		qaimd_update_Round(sk, rs);
 	}

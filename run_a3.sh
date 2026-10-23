@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Ensure kernel headers are installed and build + load tcp_qaimd.ko
-sudo apt-get update -qq && sudo apt-get install -y -qq build-essential linux-headers-$(uname -r)
+# 1. Build + load tcp_qaimd.ko
 make clean && make load
 
 # 2. Run 10-second experiments across all 10 destinations, 3 repetitions, 4 algorithms

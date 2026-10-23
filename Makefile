@@ -1,10 +1,10 @@
 obj-m += tcp_qaimd.o
 
-KDIR ?= /lib/modules/$(shell uname -r)/build
+KDIR ?= $(HOME)/WSL2-Linux-Kernel
 PWD  := $(shell pwd)
 
 all:
-	$(MAKE) -C $(KDIR) M=$(PWD) modules
+	$(MAKE) KBUILD_MODPOST_WARN=1 -C $(KDIR) M=$(PWD) modules
 
 clean:
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
