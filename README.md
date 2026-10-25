@@ -93,7 +93,7 @@ python3 iperf_client.py speedtest.dal13.us.leaseweb.net -p 5207 -C bbr -t 10 -i 
 | `attempts.csv` | every probe and test attempt with its outcome (`ok`, `ACCESS_DENIED`, `CONNECT_TIMEOUT`, ...) |
 | `tests.jsonl` | one line per test: algorithm requested/used, bytes sent/acked/received by the server, server JSON results |
 | `samples.csv` | one row per sample: goodput, cwnd, srtt, rttvar, min_rtt, retransmits, lost, ca_state, pacing/delivery rate, counters |
-| `plots/*.pdf` | `q1_goodput_<cc>`, `q2_timeseries`, `q2_scatter`, `q3_timeseries_grid`, `q3_timeseries_overlay`, `q3_scatter_grid`, `q3_variability`, `q3_tradeoff` |
-| `tables/*.{csv,md}` | `q1_goodput_summary` (min/median/mean/p95), `q1_destinations`, `q1_attempt_outcomes`, `q1_failures`, `q3_per_run`, `q3_dest_summary`, `q3_winners`, `run_overview` |
+| `plots/*.pdf` | `q1_goodput_<cc>`, `q2_timeseries`, `q2_scatter`, `q3_timeseries_grid`, `q3_scatter_grid` |
+| `tables/*.{csv,md}` | `q1_goodput_summary` (min/median/mean/p95), `q1_destinations`, `q1_attempt_outcomes`, `q1_failures`, `q3_dest_summary`, `run_overview` |
 
 To build the report: `pandoc REPORT.md -o report.pdf --pdf-engine=xelatex -V geometry:margin=0.8in`
