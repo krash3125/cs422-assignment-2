@@ -134,9 +134,6 @@ Goodput over all 200 ms samples of the 3 repetitions (Mbps):
 |  | reno | 0.0 | 97.4 | 84.3 | 124.1 |
 |  | bbr | 0.0 | 97.1 | 83.1 | 146.4 |
 
-Goodput ranges from about 80 Mbps (Singapore) to about 240 Mbps (US East). The minimum is the first slow-start sample
-or a stall; 0.0 values occur only on the 180–210 ms paths, where a 200 ms interval can be shorter than one RTT.
-
 # 2. TCP Stats Tracing During Transfer
 
 All Q2 measurements use **CUBIC**, the kernel default. Each test reads the algorithm back from the data socket and
