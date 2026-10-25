@@ -201,24 +201,6 @@ def q3_timeseries_grid(samples, host, path):
     plt.close(fig)
 
 
-def q3_timeseries_overlay(samples, host, path):
-    cols = [("cwnd_pkts", "cwnd (segments)"), ("srtt_ms", "srtt (ms)"),
-            ("retrans_pkts_delta", "retrans segs / interval"), ("goodput_mbps", "goodput (Mbps)")]
-    fig, axes = plt.subplots(4, 1, figsize=(7.5, 7.5), sharex=True)
-    for cc in algos_in(samples):
-        run = representative_run(samples, host, cc)
-        for ax, (col, label) in zip(axes, cols):
-            ax.plot(run["t_s"], run[col], color=CC_COLORS.get(cc, INK), label=cc)
-            ax.set_ylabel(label)
-    floor_at_zero(axes)
-    axes[0].legend(ncol=4, fontsize=8, loc="upper right")
-    axes[-1].set_xlabel("time (s)")
-    fig.suptitle(f"Q3: CUBIC vs Reno vs BBR overlaid, {host}", x=0.01, ha="left")
-    fig.tight_layout()
-    fig.savefig(path)
-    plt.close(fig)
-
-
 def q3_scatter_grid(samples, host, path):
     algos = algos_in(samples)
     d_host = samples[samples["host"] == host]
@@ -255,8 +237,6 @@ def per_test_metrics(samples):
             "srtt_median_ms": d["srtt_ms"].median(), "min_rtt_ms": min_rtt,
             "rtt_inflation": d["srtt_ms"].median() / min_rtt if min_rtt else float("nan"),
             "retrans_pct": 100 * d["bytes_retrans"].max() / sent if sent else 0.0,
-            "rto_events": d["rto_events_delta"].sum() if "rto_events_delta" in d else float("nan"),
-            "cwnd_mean_kb": d["cwnd_bytes"].mean() / 1000, "bdp_kb": bdp_bytes / 1000,
             "cwnd_over_bdp": d["cwnd_bytes"].mean() / bdp_bytes if bdp_bytes else float("nan"),
             "rwnd_limited_pct": 100 * d["rwnd_limited_frac"].mean(),
             "inflight_mb": (steady["unacked_pkts"] * steady["mss_bytes"]).median() / 1e6,
@@ -300,51 +280,6 @@ def a3_algo_summary(per_test):
     return table.sort_values("cc")
 
 
-def q3_variability(per_test, path):
-    hosts = per_test.groupby("host")["min_rtt_ms"].min().sort_values().index.tolist()
-    algos = algos_in(per_test)
-    fig, axes = plt.subplots(2, 1, figsize=(7.5, 5.5), sharex=True)
-    for j, cc in enumerate(algos):
-        offset = (j - (len(algos) - 1) / 2) * 0.22
-        for i, host in enumerate(hosts):
-            d = per_test[(per_test["host"] == host) & (per_test["cc"] == cc)]
-            for ax, col in zip(axes, ["goodput_mbps", "srtt_median_ms"]):
-                ax.scatter([i + offset] * len(d), d[col], s=14, color=CC_COLORS.get(cc, INK), alpha=0.8,
-                           linewidths=0, label=cc if i == 0 else None)
-                if len(d):
-                    ax.hlines(d[col].mean(), i + offset - 0.09, i + offset + 0.09, color=CC_COLORS.get(cc, INK))
-    axes[0].set_ylabel("mean goodput per run (Mbps)")
-    axes[1].set_ylabel("median srtt per run (ms)")
-    axes[0].legend(ncol=4, fontsize=8, loc="upper right")
-    axes[1].set_xticks(range(len(hosts)))
-    axes[1].set_xticklabels([short(h) for h in hosts], rotation=35, ha="right", fontsize=7)
-    floor_at_zero(axes)
-    fig.suptitle("Q3: run-to-run variability (dot = one run, bar = mean; hosts sorted by min RTT)", x=0.01, ha="left")
-    fig.tight_layout()
-    fig.savefig(path)
-    plt.close(fig)
-
-
-def q3_tradeoff(per_test, path):
-    fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.2), sharey=True)
-    for cc in algos_in(per_test):
-        d = per_test[per_test["cc"] == cc]
-        axes[0].scatter(d["rtt_inflation"], d["goodput_mbps"], s=16, color=CC_COLORS.get(cc, INK), alpha=0.8,
-                        linewidths=0, label=cc)
-        axes[1].scatter(d["retrans_pct"], d["goodput_mbps"], s=16, color=CC_COLORS.get(cc, INK), alpha=0.8,
-                        linewidths=0, label=cc)
-    axes[0].set_xlabel("RTT inflation (median srtt / min_rtt)")
-    axes[1].set_xlabel("retransmitted bytes (%)")
-    axes[1].set_xscale("symlog", linthresh=0.01)
-    axes[0].set_ylabel("mean goodput per run (Mbps)")
-    axes[0].set_yscale("log")
-    axes[0].legend(fontsize=8)
-    fig.suptitle("Q3: throughput vs queueing delay and loss, every run", x=0.01, ha="left")
-    fig.tight_layout()
-    fig.savefig(path)
-    plt.close(fig)
-
-
 # ---------- destination selection summary (Q1b) ----------
 
 def selection_tables(run_dir, tables_dir):
@@ -382,16 +317,12 @@ def run(run_dir, rep_dest=None):
     q2_scatter(samples[(samples["host"] == host) & (samples["cc"] == base)], os.path.join(plots_dir, "q2_scatter.pdf"))
 
     q3_timeseries_grid(samples, host, os.path.join(plots_dir, "q3_timeseries_grid.pdf"))
-    q3_timeseries_overlay(samples, host, os.path.join(plots_dir, "q3_timeseries_overlay.pdf"))
     q3_scatter_grid(samples, host, os.path.join(plots_dir, "q3_scatter_grid.pdf"))
     per_test = per_test_metrics(samples)
-    save_table(per_test, tables_dir, "q3_per_run")
     summary, winners = q3_dest_summary(per_test)
     save_table(summary, tables_dir, "q3_dest_summary")
     save_table(winners, tables_dir, "q3_winners")
     save_table(a3_algo_summary(per_test), tables_dir, "a3_algo_summary")
-    q3_variability(per_test, os.path.join(plots_dir, "q3_variability.pdf"))
-    q3_tradeoff(per_test, os.path.join(plots_dir, "q3_tradeoff.pdf"))
 
     ok = (tests["status"] == "ok").sum()
     check = tests[tests["status"] == "ok"]
