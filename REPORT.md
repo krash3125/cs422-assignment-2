@@ -1,12 +1,12 @@
 ---
 title: "CS 422 Assignment 2: iPerf, TCP Statistics, and Congestion Control"
-author: "Kush Khanna"
+author: "Joseph Getachew, Kushagr Khanna, Isaac Hallman"
 date: "October 21, 2026"
 geometry: margin=0.8in
 fontsize: 10pt
 colorlinks: true
-mainfont: STIXGeneral
-monofont: Menlo
+mainfont: TeX Gyre Termes
+monofont: DejaVu Sans Mono
 monofontoptions: Scale=0.82
 header-includes:
   - \usepackage{float}
@@ -693,9 +693,9 @@ inflated `min_rtt` from claiming a larger share.
 
 # Use of AI tools
 
-I used Claude Code (Anthropic's CLI) as a pair programmer. It helped me cross-check the iperf3 state machine and JSON
+We used Claude Code (Anthropic's CLI) as a pair programmer. It helped us cross-check the iperf3 state machine and JSON
 framing against the official iperf3 source, write the first drafts of the Python modules and plotting code, set up the
-Multipass VM and Docker, and draft the prose in this report. I checked the output by running the client against real
+Multipass VM and Docker, and draft the prose in this report. We checked the output by running the client against real
 iperf3 servers, comparing the server-reported byte counts with `tcpi_bytes_acked`, checking `struct tcp_info`
-offsets against `linux/tcp.h`, and reading every plot. I reviewed all the code and the analysis, and I am prepared to
+offsets against `linux/tcp.h`, and reading every plot. We reviewed all the code and the analysis, and we are prepared to
 explain the code, measurements and design choices in the oral exam.
