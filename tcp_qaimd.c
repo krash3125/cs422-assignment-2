@@ -2,7 +2,9 @@
 /*
  * TCP QAIMD: Queue-Aware AIMD with a BDP Anchor
  * CS 422 Assignment 3 - Option 1 Kernel Module Implementation
- * Target Kernel: Linux 6.8.x (Ubuntu 24.04)
+ *
+ * Uses the cong_control() hook (like BBR) to own the window in every state.
+ * Built and tested on Ubuntu 24.04, kernel 6.8.0-147-generic (arm64).
  */
 
 #include <linux/module.h>
@@ -31,8 +33,9 @@ struct qaimd {
 	u32 rtt_round_min_us;    /* Smallest RTT seen in current round (us) */
 	u32 round_Delivered;     /* tp->delivered at start of current round */
 
-	u64 btl_bw;              /* Peak delivery rate (bytes/sec) */
+	u64 btl_bw;              /* Windowed-max delivery rate (bytes/sec) */
 	u64 prev_round_bw;       /* For startup plateau check */
+	u32 btl_bw_stamp;        /* jiffies when the current btl_bw peak was set */
 
 	u32 round_retrans_start; /* tp->total_retrans at start of round */
 	u32 last_bbr_bdp;        /* Last computed BDP in segments (for RTO cap) */
@@ -193,34 +196,38 @@ static void qaimd_update_Round(struct sock *sk, const struct rate_sample *rs)
 	ca->rtt_round_min_us = ~0U;
 }
 
-static void qaimd_main(struct sock *sk, u32 ack, int flag, const struct rate_sample *rs)
+static void qaimd_main(struct sock *sk, const struct rate_sample *rs)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct qaimd *ca = inet_csk_ca(sk);
 	u32 rtt_us;
 
-	/* 1. Update RTT signals */
+	/* 1. Update RTT signals. Only take new minima; the 10s staleness drives
+	 * the PROBE_RTT drain below, not a forced min_rtt overwrite. */
 	if (rs->rtt_us > 0) {
 		rtt_us = (u32)rs->rtt_us;
 		if (rtt_us < ca->rtt_round_min_us)
 			ca->rtt_round_min_us = rtt_us;
 
-		if (rtt_us <= ca->min_rtt_us ||
-		    time_after32(jiffies, ca->min_rtt_stamp + msecs_to_jiffies(QAIMD_PROBE_RTT_MS))) {
+		if (rtt_us <= ca->min_rtt_us) {
 			ca->min_rtt_us = rtt_us;
 			ca->min_rtt_stamp = jiffies;
 		}
 	}
 
-	/* 2. Update bottleneck bandwidth estimate (skip app-limited samples) */
+	/* 2. Bottleneck bandwidth: time-windowed max over ~10 round trips
+	 * (skip app-limited samples). */
 	if (rs->delivered > 0 && rs->interval_us > 0 && !rs->is_app_limited) {
 		u64 bw = div64_u64((u64)rs->delivered * (u64)tp->mss_cache * USEC_PER_SEC,
 				   (u64)rs->interval_us);
-		if (bw > ca->btl_bw)
+		u32 srtt_us = max_t(u32, tp->srtt_us >> 3, 1000U);
+		u32 bw_win = msecs_to_jiffies(clamp((10U * srtt_us) / 1000U, 200U, 10000U));
+
+		if (bw >= ca->btl_bw ||
+		    time_after32(jiffies, ca->btl_bw_stamp + bw_win)) {
 			ca->btl_bw = bw;
-		else
-			/* Mild decay (99.5% per ACK) so stale 10-round peaks expire */
-			ca->btl_bw = (ca->btl_bw * 995ULL) / 1000ULL;
+			ca->btl_bw_stamp = jiffies;
+		}
 	}
 
 	/* 3. Check PROBE_RTT drain window */
@@ -273,7 +280,10 @@ static u32 qaimd_ssthresh(struct sock *sk)
 
 static u32 qaimd_undo_cwnd(struct sock *sk)
 {
-	return tcp_sk(sk)->snd_cwnd;
+	struct qaimd *ca = inet_csk_ca(sk);
+
+	/* Spurious loss: restore toward the BDP anchor, else keep current cwnd. */
+	return max_t(u32, tcp_snd_cwnd(tcp_sk(sk)), ca->last_bbr_bdp);
 }
 
 static void qaimd_set_state(struct sock *sk, u8 new_state)

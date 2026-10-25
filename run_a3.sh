@@ -12,6 +12,6 @@ python3 run_experiments.py \
     -i 0.2 \
     -r 3 \
     --algos qaimd,cubic,reno,bbr \
-    --rep-dest iperf-ams-nl.eranium.net \
+    --rep-dest 84.17.41.11 \
     --seed 422 \
     --out results_a3

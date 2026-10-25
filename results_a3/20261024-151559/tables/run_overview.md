@@ -1,0 +1,6 @@
+- representative destination: 84.17.41.11
+- destinations requested/selected/shortfall: 10/8/2
+- tests ok: 94 of 96
+- cc requested == cc used in every ok test: True
+- median |bytes_acked - server_bytes| / bytes_acked: 0.04%
+- median sample interval: 0.200 s

@@ -1,0 +1,9 @@
+host,min_rtt_ms,best_goodput,best_goodput_mbps,lowest_rtt,lowest_srtt_ms
+speedtest.wdc2.us.leaseweb.net,24.684,bbr,223.8674866763134,qaimd,36.48566666666667
+66.35.22.79,25.244,bbr,196.6870487140851,qaimd,52.46066666666667
+speedtest.dal13.us.leaseweb.net,34.004,bbr,212.82811517864016,qaimd,40.54683333333333
+84.17.41.11,47.892,cubic,200.1266433956399,qaimd,53.454
+iperf3.moji.fr,100.224,bbr,141.80361337691795,qaimd,109.45516666666667
+iperf.worldstream.nl,101.87,bbr,163.91113247776548,bbr,115.322
+speedtest.syd12.au.leaseweb.net,180.232,cubic,89.13810527949897,qaimd,188.6815
+89.187.162.1,195.358,cubic,81.77425213299527,qaimd,215.37

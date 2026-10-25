@@ -9,7 +9,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-# In analyze.py, replace lines 12-13 with:
 ALGO_ORDER = ["qaimd", "cubic", "reno", "bbr"]
 CC_COLORS = {"qaimd": "#88419d", "cubic": "#2a78d6", "reno": "#eb6834", "bbr": "#1baf7a"}
 REP_STYLES = ["-", "--", ":", "-."]
@@ -285,6 +284,22 @@ def q3_dest_summary(per_test):
     return table, pd.DataFrame(winners).sort_values("min_rtt_ms")
 
 
+def a3_algo_summary(per_test):
+    """Aggregate throughput and RTT per algorithm, pooled over all destinations/runs (A3)."""
+    g = per_test.groupby("cc")
+    table = pd.DataFrame({
+        "runs": g.size(),
+        "goodput_mean_mbps": g["goodput_mbps"].mean(),
+        "goodput_median_mbps": g["goodput_mbps"].median(),
+        "goodput_p95_mbps": g["goodput_mbps"].quantile(0.95),
+        "srtt_median_ms": g["srtt_median_ms"].median(),
+        "rtt_inflation_mean": g["rtt_inflation"].mean(),
+        "retrans_pct_mean": g["retrans_pct"].mean(),
+    }).reset_index()
+    table["cc"] = pd.Categorical(table["cc"], algos_in(per_test))
+    return table.sort_values("cc")
+
+
 def q3_variability(per_test, path):
     hosts = per_test.groupby("host")["min_rtt_ms"].min().sort_values().index.tolist()
     algos = algos_in(per_test)
@@ -374,6 +389,7 @@ def run(run_dir, rep_dest=None):
     summary, winners = q3_dest_summary(per_test)
     save_table(summary, tables_dir, "q3_dest_summary")
     save_table(winners, tables_dir, "q3_winners")
+    save_table(a3_algo_summary(per_test), tables_dir, "a3_algo_summary")
     q3_variability(per_test, os.path.join(plots_dir, "q3_variability.pdf"))
     q3_tradeoff(per_test, os.path.join(plots_dir, "q3_tradeoff.pdf"))
 

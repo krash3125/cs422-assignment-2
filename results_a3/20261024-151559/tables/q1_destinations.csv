@@ -1,0 +1,9 @@
+host,ip,port,country,site,provider
+speedtest.dal13.us.leaseweb.net,209.58.159.68,5205,US,"Dallas, US",Leaseweb
+84.17.41.11,84.17.41.11,5201,US,"Seattle, US",CDN77
+89.187.162.1,89.187.162.1,5201,SG,"Singapore, SG",CDN77
+speedtest.syd12.au.leaseweb.net,23.106.244.70,5206,AU,"Sydney, AU",Leaseweb
+66.35.22.79,66.35.22.79,30005,US,"Ashburn, US",teraswitch
+speedtest.wdc2.us.leaseweb.net,23.105.9.80,5204,US,"Washington, US",Leaseweb
+iperf3.moji.fr,45.147.210.189,5212,FR,"Paris, FR",Moji
+iperf.worldstream.nl,185.182.195.76,5205,NL,"Naaldwijk, NL",Worldstream

@@ -1,6 +1,8 @@
 obj-m += tcp_qaimd.o
 
-KDIR ?= $(HOME)/WSL2-Linux-Kernel
+# Standard out-of-tree build path for a distro kernel (needs linux-headers-$(uname -r)).
+# For a custom WSL2 kernel, override: make KDIR=$(HOME)/WSL2-Linux-Kernel
+KDIR ?= /lib/modules/$(shell uname -r)/build
 PWD  := $(shell pwd)
 
 all:

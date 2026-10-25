@@ -14,5 +14,6 @@ Module.symvers
 modules.order
 .tmp_versions/
 
-# Experiment results
-results_a3/
+# Note: results_a3/ IS committed (raw measurements are a required deliverable).
+# Only the throwaway smoke-test run is ignored.
+results_a3/smoke/
