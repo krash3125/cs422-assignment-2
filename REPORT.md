@@ -200,16 +200,12 @@ min_rtt (~14 ms queue). Correlations with goodput are near zero: cwnd ρ = 0.03,
 
 **Anomalies.**
 
-- *Send-buffer limited, not cwnd-limited.* Median in-flight data is 2.53 MB (1750 segments), far below cwnd. Unacked
-  data must stay in the send buffer (`tcp_wmem` max 4 MiB), and `select()` reports writable only when ~1/3 is free, so
-  in-flight is capped near 2.6 MB. The kernel agrees: 72% of samples are flagged `app_limited`. Linux grows cwnd only
-  when cwnd-limited, hence the flat line; 2.53 MB × 8 / 0.1166 s = 174 Mbps matches the measured 173 Mbps. A rerun
-  with a 32 MiB cap (`results/wmem32m/`) confirmed this: cwnd became the limit, the CUBIC curve and ×0.7 cuts appeared,
-  and cwnd–goodput ρ rose to 0.54.
-- *Early slow-start exit (HyStart).* Singapore rep 3 left slow start at 59 segments with no loss (delay check fired on
-  a Wi-Fi RTT bump) and took 20 s to reach the cap: 57.5 Mbps vs 94–96 Mbps in the other reps.
-- *rttvar is tiny* (0.2–0.5 ms) although srtt moves ~10 ms between samples, because Linux updates it per ACK.
-- *Pacing rate is not enforced*: qdisc is `fq_codel`, not `fq`, and CUBIC does not request internal pacing.
+- *Send-buffer limited, not cwnd-limited.* Median in-flight data is 2.53 MB, far below cwnd, and 72% of samples are
+  flagged `app_limited`: unacked data is capped by the 4 MiB `tcp_wmem` send buffer, not the network, so cwnd stays
+  flat. A rerun with a 32 MiB cap (`results/wmem32m/`) confirmed it — cwnd became the limit, the CUBIC sawtooth and
+  ×0.7 cuts appeared, and cwnd–goodput ρ rose to 0.54.
+- *Early slow-start exit (HyStart).* Singapore rep 3 left slow start at 59 segments with no loss and took 20 s to reach
+  the cap: 57.5 Mbps vs 94–96 Mbps in the other reps.
 
 # 3. Comparing CUBIC, Reno and BBR, and a New Design
 
@@ -261,28 +257,25 @@ Per destination over 3 reps. RTT inflation = median srtt / min_rtt (queueing we 
 |  | reno | 84 ± 9 | 1.18 | 0.04 | 2.7 |
 |  | bbr | 83 ± 5 | 1.05 | 0.00 | 2.7 |
 
-**Operating regimes.** What decides the regime is the host's ~2.6 MB in-flight cap (Q2c) vs the path BDP. The
-bottleneck is ~250–300 Mbps (no run beat 307 Mbps at p95), so the crossover RTT is 2.6 MB × 8 / C ≈ 70–80 ms.
+**Operating regimes.** The host caps in-flight data at ~2.6 MB (Q2c), so whether a path is link- or sender-limited
+depends on its BDP relative to that cap. Grouping the table above by `rtt_inflation`, `retrans %` and `in-flight`:
 
-1. **Short paths, deep queue** (Washington, Ashburn, Seattle). BDP ≈ 0.8 MB at 27 ms, so the extra ~1.5 MB in flight
-   sits in the bottleneck buffer: srtt is 2.1–3.0× min_rtt (bufferbloat). All three saturate the link (~225–240 Mbps,
-   differences within run-to-run spread). **BBR has the lowest RTT on all three**, since it targets a BDP estimate
-   instead of filling the buffer until loss; its queue is still large because BBR v1 allows 2 × BDP in flight.
-2. **Short lossy path** (Dallas). **BBR 240 Mbps vs CUBIC 154 and Reno 150.** The path drops 0.1–0.2% before the
-   buffer fills. Each loss cuts CUBIC to 0.7× and Reno to 0.5× (Reno's sawtooth is visible in Q1), leaving in-flight at
-   0.6–1.0 MB, around the BDP, so the link idles after each cut (14–19% of samples cwnd-limited). BBR v1 does not back off
-   on loss and keeps 2.2 MB in flight.
-3. **Long paths, sender-limited** (Paris → Singapore, 97–208 ms). 2.6 MB / RTT is below C, so the link never fills:
-   inflation 1.02–1.14, almost no loss, and goodput falls as 1/RTT (180 → 83 Mbps). In-flight is 2.5–2.7 MB for every
-   algorithm, so they tie (Amsterdam 173/175/174). The algorithm only matters at startup (CUBIC's HyStart exited early
-   in 5 of 30 runs, costing 10–20 s) and after rare loss: at Sydney one loss burst halved Reno repeatedly
-   (1981 → 247 segments) and +1 MSS/RTT at 181 ms is too slow to recover (79 ± 29 vs CUBIC 110 ± 2). CUBIC's growth
-   depends on time since loss, not RTT count, so it regrows in $K = \sqrt[3]{W_{max}(1-\beta)/C} \approx 11$ s.
+1. **Short paths, deep queue** (Washington, Ashburn, Seattle; 26–53 ms). In-flight (2.2–2.5 MB) exceeds the BDP, so the
+   excess sits in the bottleneck buffer: `rtt_inflation` is 1.58–3.01 (bufferbloat). All three saturate the link
+   (~224–242 Mbps, differences within the run-to-run spread). **BBR has the lowest RTT inflation on all three**
+   (2.79/2.11/1.58 vs CUBIC and Reno).
+2. **Short lossy path** (Dallas). **BBR 240 Mbps vs CUBIC 154 and Reno 150.** The path shows 0.1–0.2% retransmits; after
+   each loss CUBIC and Reno drop to in-flight 0.6–1.0 MB (Reno's sawtooth is visible in Q1), so the link idles
+   (14–19% of samples cwnd-limited), while BBR keeps 2.2 MB in flight and does not lose throughput to the loss.
+3. **Long paths, sender-limited** (Paris → Singapore, 97–208 ms). The ~2.6 MB cap is below the BDP, so the link never
+   fills: inflation 1.02–1.18, almost no loss, and goodput falls as 1/RTT (180 → 83 Mbps). In-flight is 2.5–2.7 MB for
+   every algorithm, so they tie (Amsterdam 173/175/174). The algorithm only matters at startup (CUBIC's HyStart exited
+   early in 5 of 30 runs) and after rare loss: at Sydney a loss burst left Reno at 79 ± 29 Mbps vs CUBIC 110 ± 2.
 
-With a 32 MiB send buffer (follow-up on 4 destinations, `results/wmem32m/`), the long paths became network-limited
-and the algorithms separated: Sydney goodput nearly doubled for CUBIC (95 → 190 Mbps) and BBR (100 → 191), Reno gained
-less (108 → 153) because its slow start overshoots and its +1 MSS/RTT regrowth is slow, and BBR retransmitted 6–10% of
-bytes while CUBIC stayed under 1%.
+With a 32 MiB send buffer (4-destination follow-up `results/wmem32m/`, baseline the matched control `results/wmem4m/`),
+the long paths became network-limited and the algorithms separated: Sydney goodput roughly doubled for CUBIC
+(95 → 190 Mbps) and BBR (100 → 191), Reno gained less (108 → 153), and BBR retransmitted 6–10% of bytes vs CUBIC
+under 1%.
 
 **Variability.** BBR is the most repeatable on long paths (sd 1–5 Mbps); its noise is ProbeRTT (cwnd → 4 segments for
 ~200 ms every ~10 s, the dip at 11 s in the Amsterdam trace). CUBIC's spread comes from HyStart's startup decision,
