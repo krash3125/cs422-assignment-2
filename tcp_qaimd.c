@@ -109,7 +109,7 @@ static void qaimd_init(struct sock *sk)
 	cmpxchg(&sk->sk_pacing_status, SK_PACING_NONE, SK_PACING_NEEDED);
 }
 
-static void qaimd_update_Round(struct sock *sk, const struct rate_sample *rs)
+static void qaimd_update_Round(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct qaimd *ca = inet_csk_ca(sk);
@@ -255,7 +255,7 @@ static void qaimd_main(struct sock *sk, const struct rate_sample *rs)
 	/* 4. Check round-trip boundary */
 	if (!before(tp->snd_una, tp->snd_nxt) ||
 	    (tp->delivered - ca->round_Delivered) >= max_t(u32, tcp_snd_cwnd(tp), 1U)) {
-		qaimd_update_Round(sk, rs);
+		qaimd_update_Round(sk);
 	}
 
 	qaimd_set_pacing_rate(sk);
