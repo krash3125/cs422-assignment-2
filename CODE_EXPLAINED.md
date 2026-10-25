@@ -143,12 +143,10 @@ Every probe is logged, so the report can show which servers failed and why.
 | `representative_run` | for that destination and algorithm, picks the run with median mean goodput | Q2/Q3 |
 | `q2_timeseries` / `draw_timeseries` | cwnd, RTT (srtt ± rttvar, min_rtt), retransmits per interval (Recovery/Loss shaded), goodput | Q2b(i) |
 | `q2_scatter` | cwnd, RTT and retransmits vs goodput, with Spearman correlation | Q2b(ii) |
-| `q3_timeseries_grid` / `_overlay` | the same time series for all three algorithms, **shared y-axes** | Q3a |
+| `q3_timeseries_grid` | the same time series for all three algorithms, **shared y-axes** | Q3a |
 | `q3_scatter_grid` | the same scatters for all three algorithms, shared axes | Q3a |
-| `per_test_metrics` | one row per run: mean goodput, median srtt, min_rtt, RTT inflation, retransmit %, mean cwnd, **BDP**, cwnd/BDP, in-flight MB, cwnd-limited % | Q3a |
-| `q3_dest_summary` | mean ± std over reps per destination × algorithm, plus the winner for throughput and for RTT | Q3a |
-| `q3_variability` | dot per run + mean bar, per destination and algorithm | Q3a |
-| `q3_tradeoff` | goodput vs RTT inflation and vs retransmit % for every run | Q3a |
+| `per_test_metrics` | one row per run: mean goodput, median srtt, min_rtt, RTT inflation, retransmit %, cwnd/BDP, in-flight MB, cwnd-limited % | Q3a |
+| `q3_dest_summary` | mean ± std over reps per destination × algorithm | Q3a |
 
 Definitions used in the tables:
 - **RTT inflation** = median srtt / min_rtt. A value of 1 means no queueing; 2 means the queue doubled the delay.
