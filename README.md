@@ -5,7 +5,6 @@ A from-scratch Python iperf3 client (TCP upload). It talks to public iperf3 serv
 and compares CUBIC, Reno and BBR. One command runs everything and writes raw data, PDF plots and summary tables.
 
 - Report: [`report.pdf`](report.pdf) (source: [`REPORT.md`](REPORT.md))
-- Plain-language code walkthrough: [`CODE_EXPLAINED.md`](CODE_EXPLAINED.md)
 
 ## Files
 
