@@ -2,3 +2,18 @@ __pycache__/
 *.pyc
 .DS_Store
 results/smoke/
+
+# Kernel module build artifacts
+*.o
+*.ko
+*.mod
+*.mod.c
+*.mod.o
+.*.cmd
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Note: results_a3/ IS committed (raw measurements are a required deliverable).
+# Only the throwaway smoke-test run is ignored.
+results_a3/smoke/

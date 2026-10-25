@@ -1,0 +1,184 @@
+{
+  "requested": 10,
+  "selected": [
+    {
+      "host": "speedtest.dal13.us.leaseweb.net",
+      "ip": "209.58.159.68",
+      "port": 5205,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "NA",
+      "country": "US",
+      "site": "Dallas, US",
+      "provider": "Leaseweb"
+    },
+    {
+      "host": "84.17.41.11",
+      "ip": "84.17.41.11",
+      "port": 5201,
+      "ports": [
+        5201
+      ],
+      "continent": "NA",
+      "country": "US",
+      "site": "Seattle, US",
+      "provider": "CDN77"
+    },
+    {
+      "host": "89.187.162.1",
+      "ip": "89.187.162.1",
+      "port": 5201,
+      "ports": [
+        5201
+      ],
+      "continent": "AS",
+      "country": "SG",
+      "site": "Singapore, SG",
+      "provider": "CDN77"
+    },
+    {
+      "host": "speedtest.syd12.au.leaseweb.net",
+      "ip": "23.106.244.70",
+      "port": 5206,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "OC",
+      "country": "AU",
+      "site": "Sydney, AU",
+      "provider": "Leaseweb"
+    },
+    {
+      "host": "66.35.22.79",
+      "ip": "66.35.22.79",
+      "port": 30005,
+      "ports": [
+        30001,
+        30002,
+        30003,
+        30004,
+        30005
+      ],
+      "continent": "NA",
+      "country": "US",
+      "site": "Ashburn, US",
+      "provider": "teraswitch"
+    },
+    {
+      "host": "speedtest.wdc2.us.leaseweb.net",
+      "ip": "23.105.9.80",
+      "port": 5204,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "NA",
+      "country": "US",
+      "site": "Washington, US",
+      "provider": "Leaseweb"
+    },
+    {
+      "host": "iperf3.moji.fr",
+      "ip": "45.147.210.189",
+      "port": 5212,
+      "ports": [
+        5200,
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        5213,
+        5214,
+        5215,
+        5216,
+        5217,
+        5218,
+        5219,
+        5220,
+        5221,
+        5222,
+        5223,
+        5224,
+        5225,
+        5226,
+        5227,
+        5228,
+        5229,
+        5230,
+        5231,
+        5232,
+        5233,
+        5234,
+        5235,
+        5236,
+        5237,
+        5238,
+        5239,
+        5240
+      ],
+      "continent": "EU",
+      "country": "FR",
+      "site": "Paris, FR",
+      "provider": "Moji"
+    },
+    {
+      "host": "iperf.worldstream.nl",
+      "ip": "185.182.195.76",
+      "port": 5205,
+      "ports": [
+        5201,
+        5202,
+        5203,
+        5204,
+        5205,
+        5206,
+        5207,
+        5208,
+        5209,
+        5210
+      ],
+      "continent": "EU",
+      "country": "NL",
+      "site": "Naaldwijk, NL",
+      "provider": "Worldstream"
+    }
+  ],
+  "shortfall": 2,
+  "max_attempts": 40,
+  "seed": 422
+}

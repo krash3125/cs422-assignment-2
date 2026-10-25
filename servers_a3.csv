@@ -1,0 +1,11 @@
+host,port,continent,country,site,provider,options
+speedtest.wdc2.us.leaseweb.net,5201-5210,NA,US,"Washington, US",Leaseweb,
+speedtest.dal13.us.leaseweb.net,5201-5210,NA,US,"Dallas, US",Leaseweb,
+66.35.22.79,30001-30005,NA,US,"Ashburn, US",teraswitch,
+84.17.41.11,5201,NA,US,"Seattle, US",CDN77,
+iperf3.moji.fr,5200-5240,EU,FR,"Paris, FR",Moji,
+iperf-ams-nl.eranium.net,5201-5210,EU,NL,"Amsterdam, NL",Eranium,
+iperf.worldstream.nl,5201-5210,EU,NL,"Naaldwijk, NL",Worldstream,
+89.187.165.1,5201,EU,CH,"Zürich, CH",CDN77,
+speedtest.syd12.au.leaseweb.net,5201-5210,OC,AU,"Sydney, AU",Leaseweb,
+89.187.162.1,5201,AS,SG,"Singapore, SG",CDN77,
