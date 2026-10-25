@@ -1,5 +1,5 @@
 # CS 422 Assignment 3: TCP Congestion Control (Option 1 — Kernel Module)
-**Name:** Kush Khanna
+**Authors:** Joseph Getachew, Kushagr Khanna, Isaac Hallman
 **Repository:** <https://github.com/krash3125/cs422-assignment-2> (branch `assignment-3`)
 
 All numbers below come from one run of `./run_a3.sh`, stored in
@@ -104,8 +104,8 @@ advantage disappears and its conservatism costs throughput — its main limitati
 
 ## 6. Use of AI tools
 
-I used Claude Code to translate the QAIMD pseudocode into a kernel module, check
+We used Claude Code to translate the QAIMD pseudocode into a kernel module, check
 it against the 6.8 `tcp_congestion_ops` interface, build/load it in the Multipass
-VM, and draft this report. I verified it by loading the module, confirming
+VM, and draft this report. We verified it by loading the module, confirming
 `qaimd` is selected on the socket, and checking server bytes match
-`tcpi_bytes_acked` to 0.04%. I can explain all of it in the oral exam.
+`tcpi_bytes_acked` to 0.04%. We can explain all of it in the oral exam.

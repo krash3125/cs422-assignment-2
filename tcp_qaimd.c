@@ -324,6 +324,6 @@ static void __exit qaimd_unregister(void)
 module_init(qaimd_register);
 module_exit(qaimd_unregister);
 
-MODULE_AUTHOR("Kush Khanna");
+MODULE_AUTHOR("Joseph Getachew, Kushagr Khanna, Isaac Hallman");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("TCP QAIMD Congestion Control (CS 422 Assignment 3)");
